@@ -192,15 +192,15 @@ components:
             devname:
               type: string
               description: Device name
-              example: "Kitchen Light"
+              example: "ESP01 relay module"
             ssid:
               type: string
               description: WiFi network name
-              example: "HomeWiFi"
+              example: ""
             password:
               type: string
               description: WiFi password
-              example: "password123"
+              example: ""
             power:
               type: integer
               description: WiFi power (0=auto)
@@ -220,7 +220,7 @@ components:
             ntp_timezone:
               type: string
               description: Timezone
-              example: "Europe/Moscow"
+              example: "Europe/London"
         location:
           type: object
           properties:
@@ -228,12 +228,12 @@ components:
               type: number
               format: float
               description: Latitude
-              example: 55.509557
+              example: 51.5287398
             lng:
               type: number
               format: float
               description: Longitude
-              example: 36.035774
+              example: -0.2664056
         update:
           type: object
           properties:
