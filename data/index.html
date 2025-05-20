@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ESP01 relay module</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 id="device-name">ESP01 relay module</h1>
+
+      <div class="relay-status-container">
+        <div class="relay-status">
+          <div id="relay-indicator" class="relay-indicator off"></div>
+          <div class="relay-status-text">
+            <span class="lang-text" data-text-en="Relay status:" data-text-ru="Состояние реле:">Relay status:</span>
+            <span id="relay-state" class="lang-text" data-text-en="OFF" data-text-ru="ВЫКЛ">OFF</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="toggle-container">
+        <div class="toggle-item">
+          <label class="switch">
+            <input type="checkbox" id="toggle" />
+            <span class="slider round"></span>
+          </label>
+          <div class="tooltip-container">
+            <span class="lang-text" data-text-en="On/Off" data-text-ru="Вкл/Выкл">On/Off</span>
+            <div class="tooltip">
+              <span class="lang-text" data-text-en="Manual relay control" data-text-ru="Ручное включение и выключение реле">Manual relay control</span>
+            </div>
+          </div>
+        </div>
+        <div class="toggle-item">
+          <label class="switch">
+            <input type="checkbox" id="sunposition" />
+            <span class="slider round"></span>
+          </label>
+          <div class="tooltip-container">
+            <span class="lang-text" data-text-en="Sun Position" data-text-ru="Положение солнца">Sun Position</span>
+            <div class="tooltip">
+              <span class="lang-text" data-text-en="Turn on based on sun position (uses coordinates)" data-text-ru="Включать в зависимости от положения солнца (использует координаты)">Turn on based on sun position (uses coordinates)</span>
+            </div>
+          </div>
+        </div>
+        <div class="toggle-item">
+          <label class="switch">
+            <input type="checkbox" id="suninvertion" />
+            <span class="slider round"></span>
+          </label>
+          <div class="tooltip-container">
+            <span class="lang-text" data-text-en="Sun Inversion" data-text-ru="Инверсия">Sun Inversion</span>
+            <div class="tooltip">
+              <span class="lang-text" data-text-en="Inverts the sun position rule" data-text-ru="Инвертирует правило включения по положению солнца">Inverts the sun position rule</span>
+            </div>
+          </div>
+        </div>
+        <div class="toggle-item">
+          <label class="switch">
+            <input type="checkbox" id="lang-toggle" />
+            <span class="slider round"></span>
+          </label>
+          <div class="tooltip-container">
+            <span class="lang-text" data-text-en="EN/RU" data-text-ru="EN/RU">EN/RU</span>
+            <div class="tooltip">
+              <span class="lang-text" data-text-en="Switch language" data-text-ru="Переключить язык">Switch language</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form id="settingsForm">
+        <details class="settings-group">
+          <summary class="lang-text" data-text-en="WiFi Network" data-text-ru="Сеть WiFi">WiFi Network</summary>
+          <div class="settings-content">
+            <div class="form-row">
+              <label for="dev" class="lang-text" data-text-en="Device name *" data-text-ru="Имя устройства *">Device name *</label>
+              <input type="text" id="dev" name="dev" required placeholder="Device name" />
+            </div>
+            <div class="form-row">
+              <label for="ssid" class="lang-text" data-text-en="Network name" data-text-ru="Имя сети">Network name</label>
+              <input type="text" id="ssid" name="ssid" placeholder="SSID" />
+            </div>
+            <div class="form-row">
+              <label for="password" class="lang-text" data-text-en="Password" data-text-ru="Пароль">Password</label>
+              <input type="password" id="password" name="password" autocomplete="new-password" placeholder="password" />
+            </div>
+            <div class="form-row">
+              <label for="power" class="lang-text" data-text-en="Power" data-text-ru="Мощность">Power</label>
+              <input type="number" id="power" name="power" min="0" max="20" placeholder="0-20db (0=auto)" />
+            </div>
+            <div class="form-row">
+              <label for="phy_mode" class="lang-text" data-text-en="PHY mode" data-text-ru="Режим PHY">PHY mode</label>
+              <select id="phy_mode" name="phy_mode">
+                <option value="11b">11b</option>
+                <option value="11g">11g</option>
+                <option value="11n" selected>11n</option>
+              </select>
+            </div>
+          </div>
+        </details>
+
+        <details class="settings-group">
+          <summary class="lang-text" data-text-en="Network parameters" data-text-ru="Сетевые параметры">Network parameters</summary>
+          <div class="settings-content">
+            <div class="form-row">
+              <label for="ntp_server" class="lang-text" data-text-en="NTP server *" data-text-ru="NTP сервер *">NTP server *</label>
+              <input type="text" id="ntp_server" name="ntp_server" required placeholder="pool.ntp.org, ntp.ix.ru" />
+            </div>
+            <div class="form-row">
+              <label for="timezone" class="lang-text" data-text-en="Time zone *" data-text-ru="Часовой пояс *">Time zone *</label>
+              <input type="text" id="timezone" name="timezone" required placeholder="Europe/Moscow or +3" />
+            </div>
+          </div>
+        </details>
+
+        <details class="settings-group">
+          <summary class="lang-text" data-text-en="Location" data-text-ru="Местоположение">Location</summary>
+          <div class="settings-content">
+            <div class="form-row">
+              <label for="lat" class="lang-text" data-text-en="Latitude" data-text-ru="Широта">Latitude</label>
+              <input type="text" id="lat" name="lat" placeholder="latitude" />
+            </div>
+            <div class="form-row">
+              <label for="lng" class="lang-text" data-text-en="Longitude" data-text-ru="Долгота">Longitude</label>
+              <input type="text" id="lng" name="lng" placeholder="longitude" />
+            </div>
+          </div>
+        </details>
+
+        <div class="form-actions">
+          <button type="submit" id="save-settings-btn" class="lang-text" data-text-en="Save settings" data-text-ru="Сохранить настройки">Save settings</button>
+        </div>
+        <div class="msg" id="msg"></div>
+        <div id="wifi-power-msg" class="msg"></div>
+        <div id="datetime-display" class="datetime-display">
+          <span id="current-datetime">loading...</span>
+        </div>
+      </form>
+    </div>
+    <script src="settings.js"></script>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>404 - Page Not Found</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 id="device-name">Error 404</h1>
+
+      <div class="relay-status-container">
+        <div class="relay-status">
+          <div id="relay-indicator" class="relay-indicator off"></div>
+          <div class="relay-status-text">
+            <span class="lang-text" data-text-en="Page Not Found" data-text-ru="Страница не найдена">Page Not Found</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin: 30px 0;">
+        <p class="lang-text" data-text-en="The requested page could not be found."
+           data-text-ru="Запрашиваемая страница не найдена.">
+          The requested page could not be found.
+        </p>
+        <a href="/" class="lang-text"
+           data-text-en="Return to Home Page"
+           data-text-ru="Вернуться на главную страницу"
+           style="color: #2d8cf0; text-decoration: none; display: inline-block; margin-top: 20px;">
+          Return to Home Page
+        </a>
+      </div>
+
+      <div id="datetime-display" class="datetime-display">
+        <span id="current-datetime">404 Error</span>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+        document.documentElement.lang = currentLang;
+        document.querySelectorAll('.lang-text').forEach(element => {
+          const text = element.getAttribute(`data-text-${currentLang}`);
+          if (text) element.textContent = text;
+        });
+      });
+    </script>
+  </body>
+</html>

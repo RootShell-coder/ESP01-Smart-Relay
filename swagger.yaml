@@ -1,0 +1,243 @@
+openapi: 3.0.0
+info:
+  title: ESP01 Relay Module API
+  description: API for controlling ESP01 relay module with sun position-based automation
+  version: 1.0.0
+servers:
+  - url: http://{deviceIP}
+    description: ESP01 Device by IP address
+    variables:
+      deviceIP:
+        default: "192.168.4.1"
+        description: IP address of the ESP01 device
+  - url: /
+    description: Local device (when accessed directly)
+paths:
+  /api/getsettings:
+    get:
+      summary: Get device settings
+      description: Returns current device settings from settings.json file
+      responses:
+        '200':
+          description: JSON with all device settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+  /api/setsettings:
+    post:
+      summary: Set device settings
+      description: Saves new settings and reboots the device
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Settings'
+      responses:
+        '200':
+          description: Settings successfully saved
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Settings updated. Rebooting..."
+        '400':
+          description: Error parsing settings
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Failed to parse settings"
+        '500':
+          description: Error saving settings
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Failed to save settings"
+  /api/datetime:
+    get:
+      summary: Get current date and time
+      description: Returns device current time and NTP synchronization status
+      responses:
+        '200':
+          description: Time information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  datetime:
+                    type: string
+                    description: Current date and time in text format
+                    example: "2023-12-10 15:30:45"
+                  synced:
+                    type: boolean
+                    description: NTP sync status
+                    example: true
+  /api/gettoggle:
+    get:
+      summary: Get all switch states
+      description: Returns the state of the main switch and sun mode settings
+      responses:
+        '200':
+          description: Switch states
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  state:
+                    type: string
+                    enum: [on, off]
+                    description: Main switch state
+                    example: "on"
+                  sunPosition:
+                    type: string
+                    enum: [on, off]
+                    description: Whether sun position mode is active
+                    example: "off"
+                  sunInversion:
+                    type: string
+                    enum: [on, off]
+                    description: Whether sun logic is inverted
+                    example: "off"
+  /api/relaystate:
+    get:
+      summary: Get relay state
+      description: Returns current relay state (on/off)
+      responses:
+        '200':
+          description: Relay state
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  state:
+                    type: string
+                    enum: [on, off]
+                    description: Relay state
+                    example: "on"
+  /api/toggle:
+    post:
+      summary: Change switch states
+      description: Controls relay state and sun position operating settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state:
+                  type: string
+                  enum: [on, off]
+                  description: Desired main switch state
+                sunPosition:
+                  type: string
+                  enum: [on, off]
+                  description: Activate sun position operation mode
+                sunInversion:
+                  type: string
+                  enum: [on, off]
+                  description: Invert sun position logic
+      responses:
+        '200':
+          description: Change successfully applied
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "OK"
+        '400':
+          description: Error in JSON format or missing data
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Invalid JSON"
+  /metrics:
+    get:
+      summary: Get system metrics
+      description: Returns various system performance metrics in Prometheus format
+      responses:
+        '200':
+          description: System metrics
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: |
+                  # HELP cpu_usage_percentage CPU usage percentage
+                  # TYPE cpu_usage_percentage gauge
+                  cpu_usage_now 23.45
+                  cpu_usage_1m 15.67
+                  cpu_usage_5m 18.92
+
+                  # HELP memory_free_bytes Free heap memory
+                  # TYPE memory_free_bytes gauge
+                  memory_free_now 36712
+                  memory_free_1m 35840
+                  memory_free_5m 35100
+components:
+  schemas:
+    Settings:
+      type: object
+      properties:
+        wifi:
+          type: object
+          properties:
+            devname:
+              type: string
+              description: Device name
+              example: "Kitchen Light"
+            ssid:
+              type: string
+              description: WiFi network name
+              example: "HomeWiFi"
+            password:
+              type: string
+              description: WiFi password
+              example: "password123"
+            power:
+              type: integer
+              description: WiFi power (0=auto)
+              example: 0
+            phy_mode:
+              type: string
+              enum: [11b, 11g, 11n]
+              description: WiFi PHY mode
+              example: "11n"
+        ntp:
+          type: object
+          properties:
+            ntp_server:
+              type: string
+              description: NTP server
+              example: "pool.ntp.org"
+            ntp_timezone:
+              type: string
+              description: Timezone
+              example: "Europe/Moscow"
+        location:
+          type: object
+          properties:
+            lat:
+              type: number
+              format: float
+              description: Latitude
+              example: 55.509557
+            lng:
+              type: number
+              format: float
+              description: Longitude
+              example: 36.035774
+        update:
+          type: object
+          properties:
+            enable:
+              type: boolean
+              description: Allow updates
+              example: true

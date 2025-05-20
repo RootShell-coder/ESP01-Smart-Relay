@@ -1,0 +1,20 @@
+{
+  "wifi": {
+    "devname": "ESP01 relay module",
+    "ssid": "",
+    "password": "",
+    "power": 0,
+    "phy_mode": "11n"
+  },
+  "ntp": {
+    "ntp_server": "pool.ntp.org",
+    "ntp_timezone": "Europe/London"
+  },
+  "location": {
+    "lat": 51.5287398,
+    "lng": -0.2664056
+  },
+  "update":{
+    "enable": true
+  }
+}
