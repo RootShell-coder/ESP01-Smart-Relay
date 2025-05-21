@@ -38,6 +38,32 @@ With the sun position inversion feature, you can also set the device to operate 
 - REST API for integration with other systems
 - Prometheus-compatible metrics endpoint
 
+## Quiet Start Feature (Advanced)
+
+To prevent the relay from briefly clicking (for about 100 ms) when the ESP01 Smart Relay powers on, you can implement a "quiet start". This typically involves both a hardware modification to your relay module and a software change.
+
+**Hardware Modification:**
+You will need to modify your relay module to control the relay via GPIO3 instead of the default GPIO0. This usually involves rerouting the control signal trace on the relay PCB or adding a jumper wire. Please refer to your specific relay module's schematic for details.
+
+**Software Modification:**
+1. Open the `include/relay.h` file in the project.
+2. Change the `RELAY_PIN` definition from `0` to `3`:
+   ```cpp
+   // Before
+   // #define RELAY_PIN 0
+   
+   // After
+   #define RELAY_PIN 3 
+   ```
+3. Recompile and re-flash the firmware.
+
+![ESP01 Pinout](img/ESP01-pinout.png)
+
+**Important Considerations:**
+- GPIO0 is used by the ESP8266 for entering bootloader mode (flashing mode). By moving the relay control to GPIO3, you ensure that GPIO0 remains free for its standard boot functions, which can make re-flashing the device easier.
+- While GPIO3 is generally safer in terms of boot behavior than GPIO0 or GPIO2, some ESP-01 modules might still exhibit minor, very brief fluctuations on GPIO3 during power-up. The most robust solution for eliminating any startup click involves using a relay module with an opto-isolated input and appropriate pull-up/pull-down resistors, or a relay driver circuit that ensures a defined state during power-up.
+- Modifying hardware carries risks. Proceed with caution and ensure you understand the changes you are making.
+
 ## Hardware Requirements
 
 ![ESP01 module](img/ESP01.png)
