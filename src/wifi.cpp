@@ -182,33 +182,36 @@ void initWebServerAP() {
 
   server.on("/metrics", HTTP_GET, []() {
     String metricsOutput;
-    metricsOutput += "# HELP cpu_usage_percentage CPU usage percentage\n";
-    metricsOutput += "# TYPE cpu_usage_percentage gauge\n";
-    metricsOutput += "cpu_usage_now " + String(getCpuUsageNow(), 2) + "\n";
-    metricsOutput += "cpu_usage_1m "  + String(getCpuUsage1m(), 2)  + "\n";
-    metricsOutput += "cpu_usage_5m "  + String(getCpuUsage5m(), 2)  + "\n\n";
+    String devnamePrefix = g_settings.wifi.devname;
+    devnamePrefix.replace(" ", "_");
 
-    metricsOutput += "# HELP memory_free_bytes Free heap memory\n";
-    metricsOutput += "# TYPE memory_free_bytes gauge\n";
-    metricsOutput += "memory_free_now " + String(getMemoryUsageNow()) + "\n";
-    metricsOutput += "memory_free_1m "  + String(getMemoryUsage1m())  + "\n";
-    metricsOutput += "memory_free_5m "  + String(getMemoryUsage5m())  + "\n\n";
+    metricsOutput += "# HELP " + devnamePrefix + "_cpu_usage_percentage CPU usage percentage\n";
+    metricsOutput += "# TYPE " + devnamePrefix + "_cpu_usage_percentage gauge\n";
+    metricsOutput += devnamePrefix + "_cpu_usage_now " + String(getCpuUsageNow(), 2) + "\n";
+    metricsOutput += devnamePrefix + "_cpu_usage_1m "  + String(getCpuUsage1m(), 2)  + "\n";
+    metricsOutput += devnamePrefix + "_cpu_usage_5m "  + String(getCpuUsage5m(), 2)  + "\n\n";
 
-    metricsOutput += "# HELP wifi_rssi_dBm WiFi signal strength in dBm\n";
-    metricsOutput += "# TYPE wifi_rssi_dBm gauge\n";
-    metricsOutput += "wifi_rssi_now " + String(getWifiRssiNow(), 2) + "\n";
-    metricsOutput += "wifi_rssi_1m "  + String(getWifiRssi1m(), 2)  + "\n";
-    metricsOutput += "wifi_rssi_5m "  + String(getWifiRssi5m(), 2)  + "\n\n";
+    metricsOutput += "# HELP " + devnamePrefix + "_memory_free_bytes Free heap memory\n";
+    metricsOutput += "# TYPE " + devnamePrefix + "_memory_free_bytes gauge\n";
+    metricsOutput += devnamePrefix + "_memory_free_now " + String(getMemoryUsageNow()) + "\n";
+    metricsOutput += devnamePrefix + "_memory_free_1m "  + String(getMemoryUsage1m())  + "\n";
+    metricsOutput += devnamePrefix + "_memory_free_5m "  + String(getMemoryUsage5m())  + "\n\n";
 
-    metricsOutput += "# HELP wifi_lost_connection_count Number of WiFi disconnects\n";
-    metricsOutput += "# TYPE wifi_lost_connection_count gauge\n";
-    metricsOutput += "wifi_lost_now " + String(getWifiLostNow()) + "\n";
-    metricsOutput += "wifi_lost_1m " + String(getWifiLost1m()) + "\n";
-    metricsOutput += "wifi_lost_5m " + String(getWifiLost5m()) + "\n\n";
+    metricsOutput += "# HELP " + devnamePrefix + "_wifi_rssi_dBm WiFi signal strength in dBm\n";
+    metricsOutput += "# TYPE " + devnamePrefix + "_wifi_rssi_dBm gauge\n";
+    metricsOutput += devnamePrefix + "_wifi_rssi_now " + String(getWifiRssiNow(), 2) + "\n";
+    metricsOutput += devnamePrefix + "_wifi_rssi_1m "  + String(getWifiRssi1m(), 2)  + "\n";
+    metricsOutput += devnamePrefix + "_wifi_rssi_5m "  + String(getWifiRssi5m(), 2)  + "\n\n";
 
-    metricsOutput += "# HELP system_uptime_seconds Uptime in seconds\n";
-    metricsOutput += "# TYPE system_uptime_seconds gauge\n";
-    metricsOutput += "system_uptime_seconds " + String(getUptimeSeconds()) + "\n";
+    metricsOutput += "# HELP " + devnamePrefix + "_wifi_lost_connection_count Number of WiFi disconnects\n";
+    metricsOutput += "# TYPE " + devnamePrefix + "_wifi_lost_connection_count gauge\n";
+    metricsOutput += devnamePrefix + "_wifi_lost_now " + String(getWifiLostNow()) + "\n";
+    metricsOutput += devnamePrefix + "_wifi_lost_1m " + String(getWifiLost1m()) + "\n";
+    metricsOutput += devnamePrefix + "_wifi_lost_5m " + String(getWifiLost5m()) + "\n\n";
+
+    metricsOutput += "# HELP " + devnamePrefix + "_system_uptime_seconds Uptime in seconds\n";
+    metricsOutput += "# TYPE " + devnamePrefix + "_system_uptime_seconds gauge\n";
+    metricsOutput += devnamePrefix + "_system_uptime_seconds " + String(getUptimeSeconds()) + "\n";
 
     server.send(200, "text/plain", metricsOutput);
   });

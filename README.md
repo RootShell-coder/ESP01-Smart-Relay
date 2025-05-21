@@ -51,9 +51,9 @@ You will need to modify your relay module to control the relay via GPIO3 instead
    ```cpp
    // Before
    // #define RELAY_PIN 0
-   
+
    // After
-   #define RELAY_PIN 3 
+   #define RELAY_PIN 3
    ```
 3. Recompile and re-flash the firmware.
 
