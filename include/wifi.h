@@ -1,9 +1,7 @@
 #pragma once
-
 #include <Arduino.h>
 
 #define BLUE_PIN 1
-#define RELAY_PIN 0
 
 void initWiFi();
 bool connectToWiFi();
